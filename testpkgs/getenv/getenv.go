@@ -3,8 +3,11 @@ package getenv
 
 import (
 	"os"
+	"sort"
 )
 
 func Foo() {
-	_ = os.Getenv("FOO")
+	f := []int{1}
+	// Calling it through sort to prevent replacement by internal/testlog
+	sort.Slice(f, func(a, b int) bool { os.Getenv("FOO"); return false })
 }

@@ -203,6 +203,47 @@ func rewriteCallsToOnceDoEtc(pkgs []*packages.Package) {
 	})
 }
 
+// Analyze the ast of the source files of packages in pkgs,
+// reporting any calls that read the environment variables.
+func reportCallsReadingEnv(pkgs []*packages.Package) {
+	forEachPackageIncludingDependencies(pkgs, func(p *packages.Package) {
+		for _, file := range p.Syntax {
+			for _, node := range file.Decls {
+				var pre astutil.ApplyFunc
+				pre = func(c *astutil.Cursor) bool {
+					obj := isReadingEnv(p.TypesInfo, c.Node())
+					if obj == nil {
+						// This was not a call to a relevant function or method.
+						return true
+					}
+
+					// TODO Figure out how to extract value and report it
+					// - literal
+					// - constant
+					// - variable (probably just report that it can be anything)
+
+					fnType, ok := types.Unalias(p.TypesInfo.TypeOf(obj)).(*types.Signature)
+					if !ok {
+						// The argument does not appear to be a function.
+						return true
+					}
+					// Create some arguments to pass to the function.  The parameters
+					// must all be integers.
+					params := fnType.Params()
+					args := make([]ast.Expr, params.Len())
+					for i := range args {
+						args[i] = zeroLiteral(p.TypesInfo)
+					}
+					c.Replace(
+						statementCallingFunctionObject(p.TypesInfo, obj, args))
+					return true
+				}
+				astutil.Apply(node, pre, nil)
+			}
+		}
+	})
+}
+
 // isCallToSort checks if node is a statement calling sort.Sort, sort.Stable,
 // or sort.IsSorted.  If so, it returns the argument to that function.
 // Otherwise, it returns nil.
@@ -243,6 +284,53 @@ func isCallToSort(typeInfo *types.Info, node ast.Node) ast.Expr {
 		return nil
 	}
 	if name := callee.Sel.Name; name != "Sort" && name != "Stable" && name != "IsSorted" {
+		// This isn't one of the functions we're looking for.
+		return nil
+	}
+	if len(call.Args) != 1 {
+		// The function call doesn't have one argument.
+		return nil
+	}
+	return call.Args[0]
+}
+
+// isReadingEnv checks if node is a statement calling os.Getenv, os.Environ,
+// or os.LookupEnv or syscall.Getenv. If so, it returns the argument to that function.
+// Otherwise, it returns nil.
+func isReadingEnv(typeInfo *types.Info, node ast.Node) ast.Expr {
+	expr, ok := node.(*ast.ExprStmt)
+	if !ok {
+		// Not a statement node.
+		return nil
+	}
+	call, ok := expr.X.(*ast.CallExpr)
+	if !ok {
+		// Not a function call.
+		return nil
+	}
+	callee, ok := call.Fun.(*ast.SelectorExpr)
+	if !ok {
+		// The function to be called is not a selection, so it can't be a call to
+		// the sort package.  (Unless the user has dot-imported "sort", but we
+		// don't need to worry much about false negatives in unusual cases here.)
+		return nil
+	}
+	pkgIdent, ok := callee.X.(*ast.Ident)
+	if !ok {
+		// The left-hand-side of the selection is not a plain identifier.
+		return nil
+	}
+	pkgName, ok := typeInfo.Uses[pkgIdent].(*types.PkgName)
+	if !ok {
+		// The identifier does not refer to a package.
+		return nil
+	}
+	pkgNamePath := pkgName.Imported().Path()
+	if pkgNamePath != "os" && pkgNamePath != "syscall" {
+		return nil
+	}
+	if name := callee.Sel.Name; name != "Getenv" && name != "Environ" && name != "LookupEnv" {
+		// TODO make sure syscall and os are treated differently
 		// This isn't one of the functions we're looking for.
 		return nil
 	}

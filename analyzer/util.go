@@ -194,6 +194,7 @@ func isStdLib(p string) bool {
 func buildGraph(pkgs []*packages.Package, populateSyntax bool) (*callgraph.Graph, *ssa.Program, map[*ssa.Function]bool) {
 	rewriteCallsToSort(pkgs)
 	rewriteCallsToOnceDoEtc(pkgs)
+	reportCallsReadingEnv(pkgs)
 	ssaBuilderMode := ssa.InstantiateGenerics
 	if populateSyntax {
 		// Debug mode makes ssa.Function.Syntax() point to the ast Node for the
