@@ -27,7 +27,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Next_id = 15
+// Next_id = 16
 type Capability int32
 
 const (
@@ -46,6 +46,7 @@ const (
 	Capability_CAPABILITY_UNSAFE_POINTER      Capability = 12
 	Capability_CAPABILITY_REFLECT             Capability = 13
 	Capability_CAPABILITY_EXEC                Capability = 14
+	Capability_CAPABILITY_READ_ENVIRONMENT    Capability = 15
 )
 
 // Enum value maps for Capability.
@@ -66,6 +67,7 @@ var (
 		12: "CAPABILITY_UNSAFE_POINTER",
 		13: "CAPABILITY_REFLECT",
 		14: "CAPABILITY_EXEC",
+		15: "CAPABILITY_READ_ENVIRONMENT",
 	}
 	Capability_value = map[string]int32{
 		"CAPABILITY_UNSPECIFIED":         0,
@@ -83,6 +85,7 @@ var (
 		"CAPABILITY_UNSAFE_POINTER":      12,
 		"CAPABILITY_REFLECT":             13,
 		"CAPABILITY_EXEC":                14,
+		"CAPABILITY_READ_ENVIRONMENT":    15,
 	}
 )
 
@@ -806,7 +809,7 @@ const file_capability_proto_rawDesc = "" +
 	"\x12CapabilityStatList\x12J\n" +
 	"\x10capability_stats\x18\x01 \x03(\v2\x1f.capslock.proto.CapabilityStatsR\x0fcapabilityStats\x12;\n" +
 	"\vmodule_info\x18\x02 \x03(\v2\x1a.capslock.proto.ModuleInfoR\n" +
-	"moduleInfo*\xa6\x03\n" +
+	"moduleInfo*\xc7\x03\n" +
 	"\n" +
 	"Capability\x12\x1a\n" +
 	"\x16CAPABILITY_UNSPECIFIED\x10\x00\x12\x13\n" +
@@ -824,7 +827,8 @@ const file_capability_proto_rawDesc = "" +
 	"\x15CAPABILITY_UNANALYZED\x10\v\x12\x1d\n" +
 	"\x19CAPABILITY_UNSAFE_POINTER\x10\f\x12\x16\n" +
 	"\x12CAPABILITY_REFLECT\x10\r\x12\x13\n" +
-	"\x0fCAPABILITY_EXEC\x10\x0e*m\n" +
+	"\x0fCAPABILITY_EXEC\x10\x0e\x12\x1f\n" +
+	"\x1bCAPABILITY_READ_ENVIRONMENT\x10\x0f*m\n" +
 	"\x0eCapabilityType\x12\x1f\n" +
 	"\x1bCAPABILITY_TYPE_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16CAPABILITY_TYPE_DIRECT\x10\x01\x12\x1e\n" +

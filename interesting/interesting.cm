@@ -268,14 +268,14 @@ func os.CopyFS$1 CAPABILITY_FILES
 func os.Create CAPABILITY_FILES
 func os.CreateTemp CAPABILITY_FILES
 func os.DirFS CAPABILITY_FILES
-func os.Environ CAPABILITY_READ_SYSTEM_STATE
+func os.Environ CAPABILITY_READ_ENVIRONMENT
 func os.Executable CAPABILITY_READ_SYSTEM_STATE
 func os.Exit CAPABILITY_SAFE
 func os.Expand CAPABILITY_UNSPECIFIED # calls its second parameter
 func os.ExpandEnv CAPABILITY_READ_SYSTEM_STATE
 func os.FindProcess CAPABILITY_READ_SYSTEM_STATE
 func os.Getegid CAPABILITY_READ_SYSTEM_STATE
-func os.Getenv CAPABILITY_READ_SYSTEM_STATE
+func os.Getenv CAPABILITY_READ_ENVIRONMENT
 func os.Geteuid CAPABILITY_READ_SYSTEM_STATE
 func os.Getgid CAPABILITY_READ_SYSTEM_STATE
 func os.Getgroups CAPABILITY_READ_SYSTEM_STATE
@@ -292,7 +292,7 @@ func os.IsPermission CAPABILITY_SAFE
 func os.IsTimeout CAPABILITY_SAFE
 func os.Lchown CAPABILITY_FILES
 func os.Link CAPABILITY_FILES
-func os.LookupEnv CAPABILITY_READ_SYSTEM_STATE
+func os.LookupEnv CAPABILITY_READ_ENVIRONMENT
 func os.Lstat CAPABILITY_FILES
 func os.Mkdir CAPABILITY_FILES
 func os.MkdirAll CAPABILITY_FILES
@@ -723,7 +723,7 @@ func sync/atomic.SwapPointer CAPABILITY_UNSAFE_POINTER
 
 func syscall.init CAPABILITY_SAFE
 func syscall.init$1 CAPABILITY_SAFE
-func syscall.Getenv CAPABILITY_READ_SYSTEM_STATE
+func syscall.Getenv CAPABILITY_READ_ENVIRONMENT
 func (*syscall.DLLError).Error CAPABILITY_SAFE
 func (*syscall.DLLError).Unwrap CAPABILITY_SAFE
 func (syscall.Errno).Error CAPABILITY_SAFE

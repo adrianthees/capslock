@@ -85,7 +85,7 @@ message CapabilityStatList {
   repeated ModuleInfo module_info = 2;
 }
 
-// Next_id = 15
+// Next_id = 16
 enum Capability {
   CAPABILITY_UNSPECIFIED = 0;
   CAPABILITY_SAFE = 1;
@@ -102,6 +102,7 @@ enum Capability {
   CAPABILITY_UNSAFE_POINTER = 12;
   CAPABILITY_REFLECT = 13;
   CAPABILITY_EXEC = 14;
+  CAPABILITY_READ_ENVIRONMENT = 15;
 }
 
 // Next_id = 3
