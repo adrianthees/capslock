@@ -79,6 +79,7 @@ func RunCapslock(args []string, output string, pkgs []*packages.Package, queried
 	}
 	cil := GetCapabilityCounts(pkgs, queriedPackages, config)
 	ctm := template.Must(template.New("default.tmpl").Funcs(templateFuncMap).ParseFS(staticContent, "static/default.tmpl"))
+	fmt.Printf("%+v\n", getEnvReportInstance())
 	return ctm.Execute(os.Stdout, cil)
 }
 

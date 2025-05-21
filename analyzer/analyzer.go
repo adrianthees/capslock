@@ -496,6 +496,7 @@ func getPackageNodesWithCapability(pkgs []*packages.Package,
 	unsafePointerFunctions := findUnsafePointerConversions(pkgs, ssaProg, allFunctions)
 	ssaProg = nil // possibly save memory; we don't use ssaProg again
 	safe, nodesByCapability = getNodeCapabilities(graph, config.Classifier)
+	reportCallsReadingEnv(pkgs)
 
 	if !config.DisableBuiltin {
 		extraNodesByCapability = getExtraNodesByCapability(graph, allFunctions, unsafePointerFunctions)
