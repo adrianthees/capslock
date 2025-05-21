@@ -15,7 +15,7 @@ type EnvReport struct {
 
 var envReport *EnvReport
 
-func getEnvReportInstance() *EnvReport {
+func GetEnvReportInstance() *EnvReport {
 	if envReport == nil {
 		envReport = &EnvReport{
 			envVars:      make(map[string]bool, 0),
@@ -40,25 +40,25 @@ func reportCallsReadingEnv(pkgs []*packages.Package) {
 
 					if obj == nil {
 						// Call to Environ, no arguments
-						getEnvReportInstance().dynamicCount += 1
+						GetEnvReportInstance().dynamicCount += 1
 						return true
 					}
 
 					switch v := obj.(type) {
 					case *ast.BasicLit:
-						getEnvReportInstance().envVars[v.Value] = true
+						GetEnvReportInstance().envVars[v.Value] = true
 					case *ast.Ident:
 						if id, ok := p.TypesInfo.Uses[v]; ok {
 							switch idObj := id.(type) {
 							case *types.Const:
 								val := idObj.Val().String()
-								getEnvReportInstance().envVars[val] = true
+								GetEnvReportInstance().envVars[val] = true
 							default:
-								getEnvReportInstance().dynamicCount += 1
+								GetEnvReportInstance().dynamicCount += 1
 							}
 						}
 					default:
-						getEnvReportInstance().dynamicCount += 1
+						GetEnvReportInstance().dynamicCount += 1
 					}
 
 					return true

@@ -178,6 +178,7 @@ func run() error {
 		CapabilitySet:  cs,
 		OmitPaths:      *omitPaths,
 	})
+	fmt.Printf("%+v\n", analyzer.GetEnvReportInstance())
 
 	if *memprofile != "" {
 		f, err := os.Create(*memprofile)
