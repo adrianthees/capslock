@@ -43,7 +43,7 @@ var (
 	cpuprofile     = flag.String("cpuprofile", "", "write cpu profile to specified file")
 	memprofile     = flag.String("memprofile", "", "write memory profile to specified file")
 	granularity    = flag.String("granularity", "",
-		`the granularity to use for comparisons, either "package" or "function".`)
+		`the granularity to use for comparisons, either "package", "function" or "intermediate".`)
 	forceLocalModule = flag.Bool("force_local_module", false, "if the requested packages cannot be loaded in the current workspace, return an error immediately, instead of trying to load them in a temporary module")
 	omitPaths        = flag.Bool("omit_paths", false, "omit example call paths from output")
 )
