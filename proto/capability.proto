@@ -75,6 +75,7 @@ message CapabilityCountList {
   // A list of capability counts.
   map<string, int64> capability_counts = 1;
   repeated ModuleInfo module_info = 2;
+  map<string, int64> env_var_counts = 3;
 }
 
 message CapabilityStats {

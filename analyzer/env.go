@@ -65,6 +65,21 @@ func (report EnvReport) EnvVarInfo() []*proto.EnvVarInfo {
 	return envVars
 }
 
+// Simplified version of EnvReport that returns
+// a map of environment variable names to their counts
+func (report EnvReport) EnvVarCounts() map[string]int64 {
+	if len(report) == 0 {
+		return nil
+	}
+	counts := make(map[string]int64)
+	for _, vars := range report {
+		for key := range vars {
+			counts[key]++
+		}
+	}
+	return counts
+}
+
 // Analyze the ast of the source files of packages in pkgs,
 // reporting any calls that read the environment variables.
 func reportCallsReadingEnv(pkgs []*packages.Package) {

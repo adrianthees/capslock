@@ -8,3 +8,8 @@ Share feedback and file bugs at {{format "highlight"}}https://github.com/google/
 {{end}}{{end}}{{if .CapabilityCounts}}{{range $p, $index := .CapabilityCounts}}
 {{format "capability" $p}}{{$p}}{{format}}: {{$index}} references{{end}}
 {{else}}{{format "nocap"}}Capslock found no capabilities in this package.{{format}}{{end}}
+
+{{if .EnvVarCounts}}{{format "heading"}}Environment variables:{{format}}
+{{range $envVar, $count := .EnvVarCounts}}  {{ $envVar }}: {{ $count }} references
+{{end}}
+{{else}}Capslock found no environment variables{{end}}

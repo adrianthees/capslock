@@ -268,6 +268,7 @@ func GetCapabilityCounts(pkgs []*packages.Package, queriedPackages map[*types.Pa
 	return &cpb.CapabilityCountList{
 		CapabilityCounts: cm,
 		ModuleInfo:       collectModuleInfo(pkgs),
+		EnvVarCounts:     GetEnvReportInstance().EnvVarCounts(),
 	}
 }
 

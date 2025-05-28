@@ -571,6 +571,7 @@ type CapabilityCountList struct {
 	// A list of capability counts.
 	CapabilityCounts map[string]int64 `protobuf:"bytes,1,rep,name=capability_counts,json=capabilityCounts" json:"capability_counts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	ModuleInfo       []*ModuleInfo    `protobuf:"bytes,2,rep,name=module_info,json=moduleInfo" json:"module_info,omitempty"`
+	EnvVarCounts     map[string]int64 `protobuf:"bytes,3,rep,name=env_var_counts,json=envVarCounts" json:"env_var_counts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -615,6 +616,13 @@ func (x *CapabilityCountList) GetCapabilityCounts() map[string]int64 {
 func (x *CapabilityCountList) GetModuleInfo() []*ModuleInfo {
 	if x != nil {
 		return x.ModuleInfo
+	}
+	return nil
+}
+
+func (x *CapabilityCountList) GetEnvVarCounts() map[string]int64 {
+	if x != nil {
+		return x.EnvVarCounts
 	}
 	return nil
 }
@@ -855,12 +863,16 @@ const file_capability_proto_rawDesc = "" +
 	"moduleInfo\x12>\n" +
 	"\fpackage_info\x18\x03 \x03(\v2\x1b.capslock.proto.PackageInfoR\vpackageInfo\x12<\n" +
 	"\fenv_var_info\x18\x04 \x03(\v2\x1a.capslock.proto.EnvVarInfoR\n" +
-	"envVarInfo\"\xff\x01\n" +
+	"envVarInfo\"\x9d\x03\n" +
 	"\x13CapabilityCountList\x12f\n" +
 	"\x11capability_counts\x18\x01 \x03(\v29.capslock.proto.CapabilityCountList.CapabilityCountsEntryR\x10capabilityCounts\x12;\n" +
 	"\vmodule_info\x18\x02 \x03(\v2\x1a.capslock.proto.ModuleInfoR\n" +
-	"moduleInfo\x1aC\n" +
+	"moduleInfo\x12[\n" +
+	"\x0eenv_var_counts\x18\x03 \x03(\v25.capslock.proto.CapabilityCountList.EnvVarCountsEntryR\fenvVarCounts\x1aC\n" +
 	"\x15CapabilityCountsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x03R\x05value:\x028\x01\x1a?\n" +
+	"\x11EnvVarCountsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\x03R\x05value:\x028\x01\"\x98\x02\n" +
 	"\x0fCapabilityStats\x12:\n" +
@@ -913,7 +925,7 @@ func file_capability_proto_rawDescGZIP() []byte {
 }
 
 var file_capability_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_capability_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_capability_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_capability_proto_goTypes = []any{
 	(Capability)(0),             // 0: capslock.proto.Capability
 	(CapabilityType)(0),         // 1: capslock.proto.CapabilityType
@@ -928,6 +940,7 @@ var file_capability_proto_goTypes = []any{
 	(*CapabilityStatList)(nil),  // 10: capslock.proto.CapabilityStatList
 	(*Function_Site)(nil),       // 11: capslock.proto.Function.Site
 	nil,                         // 12: capslock.proto.CapabilityCountList.CapabilityCountsEntry
+	nil,                         // 13: capslock.proto.CapabilityCountList.EnvVarCountsEntry
 }
 var file_capability_proto_depIdxs = []int32{
 	0,  // 0: capslock.proto.CapabilityInfo.capability:type_name -> capslock.proto.Capability
@@ -940,15 +953,16 @@ var file_capability_proto_depIdxs = []int32{
 	6,  // 7: capslock.proto.CapabilityInfoList.env_var_info:type_name -> capslock.proto.EnvVarInfo
 	12, // 8: capslock.proto.CapabilityCountList.capability_counts:type_name -> capslock.proto.CapabilityCountList.CapabilityCountsEntry
 	4,  // 9: capslock.proto.CapabilityCountList.module_info:type_name -> capslock.proto.ModuleInfo
-	0,  // 10: capslock.proto.CapabilityStats.capability:type_name -> capslock.proto.Capability
-	3,  // 11: capslock.proto.CapabilityStats.example_callpath:type_name -> capslock.proto.Function
-	9,  // 12: capslock.proto.CapabilityStatList.capability_stats:type_name -> capslock.proto.CapabilityStats
-	4,  // 13: capslock.proto.CapabilityStatList.module_info:type_name -> capslock.proto.ModuleInfo
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	13, // 10: capslock.proto.CapabilityCountList.env_var_counts:type_name -> capslock.proto.CapabilityCountList.EnvVarCountsEntry
+	0,  // 11: capslock.proto.CapabilityStats.capability:type_name -> capslock.proto.Capability
+	3,  // 12: capslock.proto.CapabilityStats.example_callpath:type_name -> capslock.proto.Function
+	9,  // 13: capslock.proto.CapabilityStatList.capability_stats:type_name -> capslock.proto.CapabilityStats
+	4,  // 14: capslock.proto.CapabilityStatList.module_info:type_name -> capslock.proto.ModuleInfo
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_capability_proto_init() }
@@ -962,7 +976,7 @@ func file_capability_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_capability_proto_rawDesc), len(file_capability_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
