@@ -58,11 +58,17 @@ message PackageInfo {
   repeated string ignored_files = 2;
 }
 
+message EnvVarInfo {
+  optional string package_path = 1;
+  optional string var_name = 2;
+}
+
 message CapabilityInfoList {
   // A list of CapabilityInfo protos.
   repeated CapabilityInfo capability_info = 1;
   repeated ModuleInfo module_info = 2;
   repeated PackageInfo package_info = 3;
+  repeated EnvVarInfo env_var_info = 4;
 }
 
 message CapabilityCountList {

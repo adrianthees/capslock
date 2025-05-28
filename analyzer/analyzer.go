@@ -36,6 +36,8 @@ type Config struct {
 	CapabilitySet *CapabilitySet
 	// OmitPaths disables output of example call paths.
 	OmitPaths bool
+	// whether to include environment details in the output
+	EnvDetails bool
 }
 
 // Classifier is an interface for types that help map code features to
@@ -164,6 +166,7 @@ func GetCapabilityInfo(pkgs []*packages.Package, queriedPackages map[*types.Pack
 		CapabilityInfo: make([]*cpb.CapabilityInfo, len(caps)),
 		ModuleInfo:     collectModuleInfo(pkgs),
 		PackageInfo:    collectPackageInfo(pkgs),
+		EnvVarInfo:     GetEnvReportInstance().EnvVarInfo(),
 	}
 	for i := range caps {
 		cil.CapabilityInfo[i] = caps[i].CapabilityInfo
@@ -496,7 +499,9 @@ func getPackageNodesWithCapability(pkgs []*packages.Package,
 	unsafePointerFunctions := findUnsafePointerConversions(pkgs, ssaProg, allFunctions)
 	ssaProg = nil // possibly save memory; we don't use ssaProg again
 	safe, nodesByCapability = getNodeCapabilities(graph, config.Classifier)
-	reportCallsReadingEnv(pkgs)
+	if config.EnvDetails {
+		reportCallsReadingEnv(pkgs)
+	}
 
 	if !config.DisableBuiltin {
 		extraNodesByCapability = getExtraNodesByCapability(graph, allFunctions, unsafePointerFunctions)

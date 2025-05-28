@@ -445,19 +445,72 @@ func (x *PackageInfo) GetIgnoredFiles() []string {
 	return nil
 }
 
+type EnvVarInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PackagePath   *string                `protobuf:"bytes,1,opt,name=package_path,json=packagePath" json:"package_path,omitempty"`
+	VarName       *string                `protobuf:"bytes,2,opt,name=var_name,json=varName" json:"var_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnvVarInfo) Reset() {
+	*x = EnvVarInfo{}
+	mi := &file_capability_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnvVarInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnvVarInfo) ProtoMessage() {}
+
+func (x *EnvVarInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_capability_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnvVarInfo.ProtoReflect.Descriptor instead.
+func (*EnvVarInfo) Descriptor() ([]byte, []int) {
+	return file_capability_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EnvVarInfo) GetPackagePath() string {
+	if x != nil && x.PackagePath != nil {
+		return *x.PackagePath
+	}
+	return ""
+}
+
+func (x *EnvVarInfo) GetVarName() string {
+	if x != nil && x.VarName != nil {
+		return *x.VarName
+	}
+	return ""
+}
+
 type CapabilityInfoList struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// A list of CapabilityInfo protos.
 	CapabilityInfo []*CapabilityInfo `protobuf:"bytes,1,rep,name=capability_info,json=capabilityInfo" json:"capability_info,omitempty"`
 	ModuleInfo     []*ModuleInfo     `protobuf:"bytes,2,rep,name=module_info,json=moduleInfo" json:"module_info,omitempty"`
 	PackageInfo    []*PackageInfo    `protobuf:"bytes,3,rep,name=package_info,json=packageInfo" json:"package_info,omitempty"`
+	EnvVarInfo     []*EnvVarInfo     `protobuf:"bytes,4,rep,name=env_var_info,json=envVarInfo" json:"env_var_info,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *CapabilityInfoList) Reset() {
 	*x = CapabilityInfoList{}
-	mi := &file_capability_proto_msgTypes[4]
+	mi := &file_capability_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -469,7 +522,7 @@ func (x *CapabilityInfoList) String() string {
 func (*CapabilityInfoList) ProtoMessage() {}
 
 func (x *CapabilityInfoList) ProtoReflect() protoreflect.Message {
-	mi := &file_capability_proto_msgTypes[4]
+	mi := &file_capability_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -482,7 +535,7 @@ func (x *CapabilityInfoList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CapabilityInfoList.ProtoReflect.Descriptor instead.
 func (*CapabilityInfoList) Descriptor() ([]byte, []int) {
-	return file_capability_proto_rawDescGZIP(), []int{4}
+	return file_capability_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CapabilityInfoList) GetCapabilityInfo() []*CapabilityInfo {
@@ -506,6 +559,13 @@ func (x *CapabilityInfoList) GetPackageInfo() []*PackageInfo {
 	return nil
 }
 
+func (x *CapabilityInfoList) GetEnvVarInfo() []*EnvVarInfo {
+	if x != nil {
+		return x.EnvVarInfo
+	}
+	return nil
+}
+
 type CapabilityCountList struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// A list of capability counts.
@@ -517,7 +577,7 @@ type CapabilityCountList struct {
 
 func (x *CapabilityCountList) Reset() {
 	*x = CapabilityCountList{}
-	mi := &file_capability_proto_msgTypes[5]
+	mi := &file_capability_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -529,7 +589,7 @@ func (x *CapabilityCountList) String() string {
 func (*CapabilityCountList) ProtoMessage() {}
 
 func (x *CapabilityCountList) ProtoReflect() protoreflect.Message {
-	mi := &file_capability_proto_msgTypes[5]
+	mi := &file_capability_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -542,7 +602,7 @@ func (x *CapabilityCountList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CapabilityCountList.ProtoReflect.Descriptor instead.
 func (*CapabilityCountList) Descriptor() ([]byte, []int) {
-	return file_capability_proto_rawDescGZIP(), []int{5}
+	return file_capability_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CapabilityCountList) GetCapabilityCounts() map[string]int64 {
@@ -573,7 +633,7 @@ type CapabilityStats struct {
 
 func (x *CapabilityStats) Reset() {
 	*x = CapabilityStats{}
-	mi := &file_capability_proto_msgTypes[6]
+	mi := &file_capability_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -585,7 +645,7 @@ func (x *CapabilityStats) String() string {
 func (*CapabilityStats) ProtoMessage() {}
 
 func (x *CapabilityStats) ProtoReflect() protoreflect.Message {
-	mi := &file_capability_proto_msgTypes[6]
+	mi := &file_capability_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -598,7 +658,7 @@ func (x *CapabilityStats) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CapabilityStats.ProtoReflect.Descriptor instead.
 func (*CapabilityStats) Descriptor() ([]byte, []int) {
-	return file_capability_proto_rawDescGZIP(), []int{6}
+	return file_capability_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CapabilityStats) GetCapability() Capability {
@@ -653,7 +713,7 @@ type CapabilityStatList struct {
 
 func (x *CapabilityStatList) Reset() {
 	*x = CapabilityStatList{}
-	mi := &file_capability_proto_msgTypes[7]
+	mi := &file_capability_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -665,7 +725,7 @@ func (x *CapabilityStatList) String() string {
 func (*CapabilityStatList) ProtoMessage() {}
 
 func (x *CapabilityStatList) ProtoReflect() protoreflect.Message {
-	mi := &file_capability_proto_msgTypes[7]
+	mi := &file_capability_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -678,7 +738,7 @@ func (x *CapabilityStatList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CapabilityStatList.ProtoReflect.Descriptor instead.
 func (*CapabilityStatList) Descriptor() ([]byte, []int) {
-	return file_capability_proto_rawDescGZIP(), []int{7}
+	return file_capability_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CapabilityStatList) GetCapabilityStats() []*CapabilityStats {
@@ -706,7 +766,7 @@ type Function_Site struct {
 
 func (x *Function_Site) Reset() {
 	*x = Function_Site{}
-	mi := &file_capability_proto_msgTypes[8]
+	mi := &file_capability_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -718,7 +778,7 @@ func (x *Function_Site) String() string {
 func (*Function_Site) ProtoMessage() {}
 
 func (x *Function_Site) ProtoReflect() protoreflect.Message {
-	mi := &file_capability_proto_msgTypes[8]
+	mi := &file_capability_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -784,12 +844,18 @@ const file_capability_proto_rawDesc = "" +
 	"\aversion\x18\x02 \x01(\tR\aversion\"F\n" +
 	"\vPackageInfo\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12#\n" +
-	"\rignored_files\x18\x02 \x03(\tR\fignoredFiles\"\xda\x01\n" +
+	"\rignored_files\x18\x02 \x03(\tR\fignoredFiles\"J\n" +
+	"\n" +
+	"EnvVarInfo\x12!\n" +
+	"\fpackage_path\x18\x01 \x01(\tR\vpackagePath\x12\x19\n" +
+	"\bvar_name\x18\x02 \x01(\tR\avarName\"\x98\x02\n" +
 	"\x12CapabilityInfoList\x12G\n" +
 	"\x0fcapability_info\x18\x01 \x03(\v2\x1e.capslock.proto.CapabilityInfoR\x0ecapabilityInfo\x12;\n" +
 	"\vmodule_info\x18\x02 \x03(\v2\x1a.capslock.proto.ModuleInfoR\n" +
 	"moduleInfo\x12>\n" +
-	"\fpackage_info\x18\x03 \x03(\v2\x1b.capslock.proto.PackageInfoR\vpackageInfo\"\xff\x01\n" +
+	"\fpackage_info\x18\x03 \x03(\v2\x1b.capslock.proto.PackageInfoR\vpackageInfo\x12<\n" +
+	"\fenv_var_info\x18\x04 \x03(\v2\x1a.capslock.proto.EnvVarInfoR\n" +
+	"envVarInfo\"\xff\x01\n" +
 	"\x13CapabilityCountList\x12f\n" +
 	"\x11capability_counts\x18\x01 \x03(\v29.capslock.proto.CapabilityCountList.CapabilityCountsEntryR\x10capabilityCounts\x12;\n" +
 	"\vmodule_info\x18\x02 \x03(\v2\x1a.capslock.proto.ModuleInfoR\n" +
@@ -847,7 +913,7 @@ func file_capability_proto_rawDescGZIP() []byte {
 }
 
 var file_capability_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_capability_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_capability_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_capability_proto_goTypes = []any{
 	(Capability)(0),             // 0: capslock.proto.Capability
 	(CapabilityType)(0),         // 1: capslock.proto.CapabilityType
@@ -855,32 +921,34 @@ var file_capability_proto_goTypes = []any{
 	(*Function)(nil),            // 3: capslock.proto.Function
 	(*ModuleInfo)(nil),          // 4: capslock.proto.ModuleInfo
 	(*PackageInfo)(nil),         // 5: capslock.proto.PackageInfo
-	(*CapabilityInfoList)(nil),  // 6: capslock.proto.CapabilityInfoList
-	(*CapabilityCountList)(nil), // 7: capslock.proto.CapabilityCountList
-	(*CapabilityStats)(nil),     // 8: capslock.proto.CapabilityStats
-	(*CapabilityStatList)(nil),  // 9: capslock.proto.CapabilityStatList
-	(*Function_Site)(nil),       // 10: capslock.proto.Function.Site
-	nil,                         // 11: capslock.proto.CapabilityCountList.CapabilityCountsEntry
+	(*EnvVarInfo)(nil),          // 6: capslock.proto.EnvVarInfo
+	(*CapabilityInfoList)(nil),  // 7: capslock.proto.CapabilityInfoList
+	(*CapabilityCountList)(nil), // 8: capslock.proto.CapabilityCountList
+	(*CapabilityStats)(nil),     // 9: capslock.proto.CapabilityStats
+	(*CapabilityStatList)(nil),  // 10: capslock.proto.CapabilityStatList
+	(*Function_Site)(nil),       // 11: capslock.proto.Function.Site
+	nil,                         // 12: capslock.proto.CapabilityCountList.CapabilityCountsEntry
 }
 var file_capability_proto_depIdxs = []int32{
 	0,  // 0: capslock.proto.CapabilityInfo.capability:type_name -> capslock.proto.Capability
 	3,  // 1: capslock.proto.CapabilityInfo.path:type_name -> capslock.proto.Function
 	1,  // 2: capslock.proto.CapabilityInfo.capability_type:type_name -> capslock.proto.CapabilityType
-	10, // 3: capslock.proto.Function.site:type_name -> capslock.proto.Function.Site
+	11, // 3: capslock.proto.Function.site:type_name -> capslock.proto.Function.Site
 	2,  // 4: capslock.proto.CapabilityInfoList.capability_info:type_name -> capslock.proto.CapabilityInfo
 	4,  // 5: capslock.proto.CapabilityInfoList.module_info:type_name -> capslock.proto.ModuleInfo
 	5,  // 6: capslock.proto.CapabilityInfoList.package_info:type_name -> capslock.proto.PackageInfo
-	11, // 7: capslock.proto.CapabilityCountList.capability_counts:type_name -> capslock.proto.CapabilityCountList.CapabilityCountsEntry
-	4,  // 8: capslock.proto.CapabilityCountList.module_info:type_name -> capslock.proto.ModuleInfo
-	0,  // 9: capslock.proto.CapabilityStats.capability:type_name -> capslock.proto.Capability
-	3,  // 10: capslock.proto.CapabilityStats.example_callpath:type_name -> capslock.proto.Function
-	8,  // 11: capslock.proto.CapabilityStatList.capability_stats:type_name -> capslock.proto.CapabilityStats
-	4,  // 12: capslock.proto.CapabilityStatList.module_info:type_name -> capslock.proto.ModuleInfo
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	6,  // 7: capslock.proto.CapabilityInfoList.env_var_info:type_name -> capslock.proto.EnvVarInfo
+	12, // 8: capslock.proto.CapabilityCountList.capability_counts:type_name -> capslock.proto.CapabilityCountList.CapabilityCountsEntry
+	4,  // 9: capslock.proto.CapabilityCountList.module_info:type_name -> capslock.proto.ModuleInfo
+	0,  // 10: capslock.proto.CapabilityStats.capability:type_name -> capslock.proto.Capability
+	3,  // 11: capslock.proto.CapabilityStats.example_callpath:type_name -> capslock.proto.Function
+	9,  // 12: capslock.proto.CapabilityStatList.capability_stats:type_name -> capslock.proto.CapabilityStats
+	4,  // 13: capslock.proto.CapabilityStatList.module_info:type_name -> capslock.proto.ModuleInfo
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_capability_proto_init() }
@@ -894,7 +962,7 @@ func file_capability_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_capability_proto_rawDesc), len(file_capability_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   10,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

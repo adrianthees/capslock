@@ -4,25 +4,65 @@ import (
 	"go/ast"
 	"go/types"
 
+	"github.com/google/capslock/proto"
 	"golang.org/x/tools/go/ast/astutil"
 	"golang.org/x/tools/go/packages"
 )
 
-type EnvReport struct {
-	envVars      map[string]bool
-	dynamicCount uint
-}
+type EnvReport map[*packages.Package]map[string]struct{}
 
 var envReport *EnvReport
 
+func (report EnvReport) Add(pkg *packages.Package, key string) {
+	_, ok := report[pkg]
+	if !ok {
+		report[pkg] = make(map[string]struct{})
+	}
+	report[pkg][key] = struct{}{}
+}
+
 func GetEnvReportInstance() *EnvReport {
 	if envReport == nil {
-		envReport = &EnvReport{
-			envVars:      make(map[string]bool, 0),
-			dynamicCount: 0,
-		}
+		report := EnvReport(make(map[*packages.Package]map[string]struct{}))
+		envReport = &report
 	}
 	return envReport
+}
+
+// Remove specific prefix from string
+// if the string does not start with the prefix, it is returned unchanged.
+func removePrefix(s string, l string) string {
+	if len(s) < len(l) || s[:len(l)] != l {
+		return s
+	}
+	return s[len(l):]
+}
+
+// Remove specific postfix from string
+// if the string does not end with the prefix, it is returned unchanged.
+func removePostfix(s string, l string) string {
+	if len(s) < len(l) || s[len(s)-len(l):] != l {
+		return s
+	}
+	return s[:len(s)-len(l)]
+}
+
+// Remove quotes from the beginning and end of a string
+func trimQuotes(s string) string {
+	return removePrefix(removePostfix(s, "\""), "\"")
+}
+
+func (report EnvReport) EnvVarInfo() []*proto.EnvVarInfo {
+	envVars := make([]*proto.EnvVarInfo, 0)
+	for pkg, vars := range report {
+		for key := range vars {
+			envVars = append(envVars, &proto.EnvVarInfo{
+				PackagePath: &pkg.PkgPath,
+				VarName:     &key,
+			})
+		}
+	}
+	return envVars
 }
 
 // Analyze the ast of the source files of packages in pkgs,
@@ -40,25 +80,27 @@ func reportCallsReadingEnv(pkgs []*packages.Package) {
 
 					if obj == nil {
 						// Call to Environ, no arguments
-						GetEnvReportInstance().dynamicCount += 1
+						GetEnvReportInstance().Add(p, "=DYNAMIC=")
+
 						return true
 					}
 
 					switch v := obj.(type) {
 					case *ast.BasicLit:
-						GetEnvReportInstance().envVars[v.Value] = true
+						val := trimQuotes(v.Value)
+						GetEnvReportInstance().Add(p, val)
 					case *ast.Ident:
 						if id, ok := p.TypesInfo.Uses[v]; ok {
 							switch idObj := id.(type) {
 							case *types.Const:
-								val := idObj.Val().String()
-								GetEnvReportInstance().envVars[val] = true
+								val := trimQuotes(idObj.Val().String())
+								GetEnvReportInstance().Add(p, val)
 							default:
-								GetEnvReportInstance().dynamicCount += 1
+								GetEnvReportInstance().Add(p, "=DYNAMIC=")
 							}
 						}
 					default:
-						GetEnvReportInstance().dynamicCount += 1
+						GetEnvReportInstance().Add(p, "=DYNAMIC=")
 					}
 
 					return true

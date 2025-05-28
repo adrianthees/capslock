@@ -46,6 +46,7 @@ var (
 		`the granularity to use for comparisons, either "package" or "function".`)
 	forceLocalModule = flag.Bool("force_local_module", false, "if the requested packages cannot be loaded in the current workspace, return an error immediately, instead of trying to load them in a temporary module")
 	omitPaths        = flag.Bool("omit_paths", false, "omit example call paths from output")
+	envDetails       = flag.Bool("env_details", false, "print an environment report at the end of the analysis")
 )
 
 func main() {
@@ -177,8 +178,8 @@ func run() error {
 		Granularity:    g,
 		CapabilitySet:  cs,
 		OmitPaths:      *omitPaths,
+		EnvDetails:     *envDetails,
 	})
-	fmt.Printf("%+v\n", analyzer.GetEnvReportInstance())
 
 	if *memprofile != "" {
 		f, err := os.Create(*memprofile)
