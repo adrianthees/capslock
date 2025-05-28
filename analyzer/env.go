@@ -158,7 +158,7 @@ func isReadingEnv(typeInfo *types.Info, node ast.Node) (ast.Expr, bool) {
 		return nil, false
 	}
 	pkgNamePath := pkgName.Imported().Path()
-	if pkgNamePath != "os" && pkgNamePath != "syscall" {
+	if pkgNamePath != "os" && pkgNamePath != "syscall" && pkgNamePath != "internal/testlog" {
 		return nil, false
 	}
 	if name := callee.Sel.Name; name != "Getenv" && name != "Environ" && name != "LookupEnv" {
