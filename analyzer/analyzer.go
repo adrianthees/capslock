@@ -8,6 +8,7 @@ package analyzer
 
 import (
 	"go/ast"
+	"go/token"
 	"go/types"
 	"slices"
 	"sort"
@@ -104,9 +105,10 @@ func GetCapabilityInfo(pkgs []*packages.Package, queriedPackages map[*types.Pack
 			var n string
 			var ctype cpb.CapabilityType
 			var incomingEdge *callgraph.Edge
+			var lastPosition *token.Position
 			for v != nil {
 				if !config.OmitPaths || (i == 0 && config.Granularity == GranularityFunction) {
-					addFunction(&c.Path, v, incomingEdge)
+					lastPosition = addFunction(&c.Path, v, incomingEdge)
 				}
 				if i == 0 {
 					n = v.Func.Package().Pkg.Path()
@@ -132,6 +134,15 @@ func GetCapabilityInfo(pkgs []*packages.Package, queriedPackages map[*types.Pack
 				}
 				c.DepPath = proto.String(b.String())
 			}
+
+			if config.EnvDetails && cap == cpb.Capability_CAPABILITY_READ_ENVIRONMENT {
+				if len(c.Path) < 2 {
+					// problem: how was this called if the call stack is less than 2? literally shouldn't happen
+				} else {
+					GetEnvCallsInstance().Add(*c.DepPath, *lastPosition)
+				}
+			}
+
 			caps = append(caps, output{&c, fn})
 		}, config)
 	sort.Slice(caps, func(i, j int) bool {
@@ -162,11 +173,12 @@ func GetCapabilityInfo(pkgs []*packages.Package, queriedPackages map[*types.Pack
 		}
 		caps = slices.DeleteFunc(caps, del)
 	}
+
 	cil := &cpb.CapabilityInfoList{
 		CapabilityInfo: make([]*cpb.CapabilityInfo, len(caps)),
 		ModuleInfo:     collectModuleInfo(pkgs),
 		PackageInfo:    collectPackageInfo(pkgs),
-		EnvVarInfo:     GetEnvReportInstance().EnvVarInfo(),
+		EnvVarInfo:     GetEnvCallsInstance().EnvVarInfo(),
 	}
 	for i := range caps {
 		cil.CapabilityInfo[i] = caps[i].CapabilityInfo
@@ -268,7 +280,6 @@ func GetCapabilityCounts(pkgs []*packages.Package, queriedPackages map[*types.Pa
 	return &cpb.CapabilityCountList{
 		CapabilityCounts: cm,
 		ModuleInfo:       collectModuleInfo(pkgs),
-		EnvVarCounts:     GetEnvReportInstance().EnvVarCounts(),
 	}
 }
 
@@ -500,9 +511,6 @@ func getPackageNodesWithCapability(pkgs []*packages.Package,
 	unsafePointerFunctions := findUnsafePointerConversions(pkgs, ssaProg, allFunctions)
 	ssaProg = nil // possibly save memory; we don't use ssaProg again
 	safe, nodesByCapability = getNodeCapabilities(graph, config.Classifier)
-	if config.EnvDetails {
-		reportCallsReadingEnv(pkgs)
-	}
 
 	if !config.DisableBuiltin {
 		extraNodesByCapability = getExtraNodesByCapability(graph, allFunctions, unsafePointerFunctions)

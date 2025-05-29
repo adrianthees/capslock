@@ -527,7 +527,7 @@ func programName() string {
 
 // addFunction adds an entry to *fns for the given node and edge.
 // The edge can be nil.
-func addFunction(fns *[]*cpb.Function, v *callgraph.Node, incomingEdge *callgraph.Edge) {
+func addFunction(fns *[]*cpb.Function, v *callgraph.Node, incomingEdge *callgraph.Edge) *token.Position {
 	fn := &cpb.Function{Name: proto.String(v.Func.String())}
 	if pkg := nodeToPackage(v); pkg != nil {
 		fn.Package = proto.String(pkg.Path())
@@ -540,6 +540,10 @@ func addFunction(fns *[]*cpb.Function, v *callgraph.Node, incomingEdge *callgrap
 		}
 	}
 	*fns = append(*fns, fn)
+	if position := callsitePosition(incomingEdge); position.IsValid() {
+		return &position
+	}
+	return nil
 }
 
 // nodeToPackage returns the package of the node's function, or nil if it has
